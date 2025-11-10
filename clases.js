@@ -1,5 +1,30 @@
 // Clase Juego
-class Juego {}
+class Juego {
+    constructor(tamanyo = 20){
+        this.perdidio = false;
+        this.ganado = false;
+        this.creartablero(tamanyo);
+        
+        let comida = new Comida(10,17);
+    }
+
+    creartablero(tamanyo){
+        const body = document.getElementsByTagName("body")[0];
+        //crear el tablero
+        const tablero = document.createElement("div");
+        tablero.id = "tablero";
+        body.appendChild(tablero);
+        //crear las 400 celdas
+        for (let i = 1; i <= tamanyo; i++) {
+            for (let j = 1; j <= tamanyo; j++) {
+            const celda = document.createElement("div");
+            celda.id = `${i}-${j}`;
+            celda.classList.add("vacio");
+            tablero.appendChild(celda);
+            }
+        }
+    }
+}
 
 // Clase Serpiente
 class Serpiente {
@@ -59,17 +84,30 @@ class Serpiente {
 
 // Clase Comida
 class Comida {
-    constructor(x, y) {
+    constructor(x = 10, y = 17) {
         this.x = x;
         this.y = y;
+        this.dibujar(x,y);
     }
 
-    generarPosicionAleatoria(tamanioTablero, posicionesOcupadas) {
-
+    generarPosicionAleatoria(tamanioTablero) {
+        let x = Math.floor(Math.random() * (tamanioTablero )) + 1;
+        let y = Math.floor(Math.random() * (tamanioTablero )) + 1;
+        return [x, y];
     }
 
-    dibujar(tableroDOM) {
-
+    dibujar(x,y) {
+        let posicion = x + "-" + y;
+        let celda = document.getElementById(posicion);
+        if (celda.classList.contains("cabeza") || celda.classList.contains("cuerpo")) {
+            return false
+        } else {
+            celda.classList.remove("vacio");
+            celda.classList.add("comida");
+            this.x = x;
+            this.y = y;
+            return true;
+        }
     }
 
 }
