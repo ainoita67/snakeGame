@@ -30,52 +30,99 @@ class Juego {
 class Serpiente {
     constructor() {
         // La serpiente empieza con longitud 3
-        this.longitud = 3;
-        this.posCabezaX = [10];
-        this.posCabezaY = [10];
+        this.posCabezaX = [8, 9, 10];
+        this.posCabezaY = [8, 9, 10];
         this.direccion = "derecha";
         this.crecer = false;
+        this.viva = true;
     }
 
     mover() {
         // Añadimos las coordenadas según la dirección
         switch (this.direccion) {
             case "arriba":
-                this.posCabezaX
+                this.posCabezaX.push(this.posCabezaX[this.posCabezaX.length - 1]);
+                this.posCabezaY.push(this.posCabezaY[this.posCabezaY.length - 1] - 1);
             break;
             case "abajo":
-            cabeza.y++;
+                this.posCabezaX.push(this.posCabezaX[this.posCabezaX.length - 1]);
+                this.posCabezaY.push(this.posCabezaY[this.posCabezaY.length - 1] + 1);
             break;
             case "izquierda":
-            cabeza.x--;
+                this.posCabezaX.push(this.posCabezaX[this.posCabezaX.length - 1] - 1);
+                this.posCabezaY.push(this.posCabezaY[this.posCabezaY.length - 1]);
             break;
             case "derecha":
-            cabeza.x++;
+                this.posCabezaX.push(this.posCabezaX[this.posCabezaX.length - 1] + 1);
+                this.posCabezaY.push(this.posCabezaY[this.posCabezaY.length - 1]);
             break;
         }
 
-        // Añadimos la nueva cabeza al principio del array
-        this.cuerpo.unshift(cabeza);
-
-        // Si no tiene que crecer, eliminamos la última celda
+        // Si no debe crecer, recorta los arrays para mantener la longitud actual
         if (!this.crecer) {
-            this.cuerpo.pop();
+            while (this.posCabezaX.length > this.longitud) {
+                this.posCabezaX.shift();
+                this.posCabezaY.shift();
+            }
         } else {
             this.crecer = false;
         }
-    }
+
+        // Comprobamos que la serpiente siga viva
+        if (this.chocaConparedes() || this.chocaConsigoMisma) {
+            this.viva = false;
+        }
+    }   
 
     // Cambia la dirección de movimiento (evita girar 180°)
-    cambiarDireccion(nuevaDireccion) {}
+    cambiarDireccion(nuevaDireccion) {
+        const opuestos = {
+            arriba: "abajo",
+            abajo: "arriba",
+            izquierda: "derecha",
+            derecha: "izquierda"
+        };
+
+        // Solo cambia si no es la dirección opuesta
+        if (opuestos[this.direccion] !== nuevaDireccion) {
+            this.direccion = nuevaDireccion;
+        }
+    }
 
     // Comprueba si la cabeza choca con las paredes
-    chocaConparedes(tamañoTablero) {}
+    chocaConparedes() {
+        const tamanioTablero = 20;
+        const cabezaX = this.posCabezaX[this.posCabezaX.length - 1];
+        const cabezaY = this.posCabezaY[this.posCabezaY.length - 1];
+
+        // fuera de los límites
+        return (
+            cabezaX < 0 ||
+            cabezaX >= tamanioTablero ||
+            cabezaY < 0 ||
+            cabezaY >= tamanioTablero
+        );
+    }
 
     // Comprueba si la cabeza choca con su propio cuerpo
-    chocaConsigoMisma() {}
+    chocaConsigoMisma() {
+        let posicion = this.posCabezaX[this.posCabezaX.length - 1] + "-" + this.posCabezaY[this.posCabezaY.length - 1];
+        let celda = document.getElementById(posicion);
+        if (celda.classList.contains("cuerpo")) {
+            return true;
+        }
+        return false;
+    }
 
     // Comprueba si la serpiente come la comida
-    comer(comida) {}
+    comer(comida) {
+        let posicion = this.posCabezaX[this.posCabezaX.length - 1] + "-" + this.posCabezaY[this.posCabezaY.length - 1];
+        let celda = document.getElementById(posicion);
+        if (celda.classList.contains("comida")) {
+            this.crecer = true;
+        }
+        this.crecer = false;
+    }
 
     // Dibuja la serpiente en el tablero (DOM)
     dibujar(tableroDOM) {}
