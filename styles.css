@@ -1,0 +1,32 @@
+
+body{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+#tablero{
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    grid-template-rows: repeat(20, 1fr);
+    width: 45%;
+    aspect-ratio: 1 / 1;
+    border: 5px solid chocolate;
+}
+
+.cabeza{
+    background-color: green;
+}
+
+.comida{
+    background-color: red;
+}
+
+.cuerpo{
+    background-color: cornflowerblue;
+}
+
+.vacio{
+    background-color: white;
+    border: 1px solid saddlebrown;
+}

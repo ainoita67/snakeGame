@@ -4,8 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>snake</title>
+    <link rel="stylesheet" href="styles.css">
+
 </head>
 <body>
-    <h1>snake</h1>
+    <h1>SNAKE</h1>
+    <div id="tablero">
+    </div>
 </body>
+
+<script>
+  const tablero = document.getElementById("tablero");
+
+  for (let i = 1; i <= 20; i++) {
+    for (let j = 1; j <= 20; j++) {
+      const celda = document.createElement("div");
+      celda.id = `${i}-${j}`;
+      celda.classList.add("vacio");
+      tablero.appendChild(celda);
+    }
+  }
+</script>
 </html>
