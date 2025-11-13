@@ -3,5 +3,8 @@ function empezarjuego(){
     let boton = document.getElementById("boton");
     boton.classList.add("invisible");
 
-    juego
+    
+}
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

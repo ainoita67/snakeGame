@@ -3,9 +3,47 @@ class Juego {
     constructor(tamanyo = 20){
         this.perdidio = false;
         this.ganado = false;
+        this.tamanyo = tamanyo;
         this.creartablero(tamanyo);
         
         let comida = new Comida(10,17);
+        let serpiente = new Serpiente();
+
+        document.addEventListener("keydown", (event) => {
+            switch (event.key) {
+                case "ArrowUp":
+                    serpiente.direccion = "arriba";
+                    break;
+                case "ArrowDown":
+                    serpiente.direccion = "abajo";
+                    break;
+                case "ArrowLeft":
+                    serpiente.direccion = "izquierda";
+                    break;
+                case "ArrowRight":
+                    serpiente.direccion = "derecha";
+                    break;
+            }
+            });
+
+        const intervalo = setInterval(() => {
+            serpiente.mover();
+            serpiente.comer();
+            if (serpiente.comer()) {
+                let posAleatoria;
+                do{
+                   posAleatoria = comida.generarPosicionAleatoria(tamanyo);
+                }
+                while (!comida.dibujar(posAleatoria[0] , posAleatoria[1]));
+            }
+            serpiente.dibujar();
+
+            if (!serpiente.viva) {
+                clearInterval(intervalo);
+                alert("Has perdido. Puntos: " + (serpiente.posX.length - 4));
+                window.location.href = "index.html";
+            }
+        }, 300);
     }
 
     creartablero(tamanyo){
@@ -18,7 +56,7 @@ class Juego {
         for (let i = 1; i <= tamanyo; i++) {
             for (let j = 1; j <= tamanyo; j++) {
             const celda = document.createElement("div");
-            celda.id = `${i}-${j}`;
+            celda.id = `${j}-${i}`;
             celda.classList.add("vacio");
             tablero.appendChild(celda);
             }
@@ -30,46 +68,45 @@ class Juego {
 class Serpiente {
     constructor() {
         // La serpiente empieza con longitud 3
-        this.posCabezaX = [8, 9, 10];
-        this.posCabezaY = [8, 9, 10];
+        this.posX = [2, 3, 4, 5];
+        this.posY = [10, 10, 10, 10];
         this.direccion = "derecha";
         this.crecer = false;
         this.viva = true;
+        this.dibujar();
     }
 
     mover() {
         // Añadimos las coordenadas según la dirección
         switch (this.direccion) {
             case "arriba":
-                this.posCabezaX.push(this.posCabezaX[this.posCabezaX.length - 1]);
-                this.posCabezaY.push(this.posCabezaY[this.posCabezaY.length - 1] - 1);
+                this.posX.push(this.posX[this.posX.length - 1]);
+                this.posY.push(this.posY[this.posY.length - 1] - 1);
             break;
             case "abajo":
-                this.posCabezaX.push(this.posCabezaX[this.posCabezaX.length - 1]);
-                this.posCabezaY.push(this.posCabezaY[this.posCabezaY.length - 1] + 1);
+                this.posX.push(this.posX[this.posX.length - 1]);
+                this.posY.push(this.posY[this.posY.length - 1] + 1);
             break;
             case "izquierda":
-                this.posCabezaX.push(this.posCabezaX[this.posCabezaX.length - 1] - 1);
-                this.posCabezaY.push(this.posCabezaY[this.posCabezaY.length - 1]);
+                this.posX.push(this.posX[this.posX.length - 1] - 1);
+                this.posY.push(this.posY[this.posY.length - 1]);
             break;
             case "derecha":
-                this.posCabezaX.push(this.posCabezaX[this.posCabezaX.length - 1] + 1);
-                this.posCabezaY.push(this.posCabezaY[this.posCabezaY.length - 1]);
+                this.posX.push(this.posX[this.posX.length - 1] + 1);
+                this.posY.push(this.posY[this.posY.length - 1]);
             break;
         }
 
         // Si no debe crecer, recorta los arrays para mantener la longitud actual
         if (!this.crecer) {
-            while (this.posCabezaX.length > this.longitud) {
-                this.posCabezaX.shift();
-                this.posCabezaY.shift();
-            }
+            this.posX.shift();
+            this.posY.shift();
         } else {
             this.crecer = false;
         }
 
         // Comprobamos que la serpiente siga viva
-        if (this.chocaConparedes() || this.chocaConsigoMisma) {
+        if (this.chocaConparedes() || this.chocaConsigoMisma()) {
             this.viva = false;
         }
     }   
@@ -92,21 +129,21 @@ class Serpiente {
     // Comprueba si la cabeza choca con las paredes
     chocaConparedes() {
         const tamanioTablero = 20;
-        const cabezaX = this.posCabezaX[this.posCabezaX.length - 1];
-        const cabezaY = this.posCabezaY[this.posCabezaY.length - 1];
+        const cabezaX = this.posX[this.posX.length - 1];
+        const cabezaY = this.posY[this.posY.length - 1];
 
         // fuera de los límites
         return (
             cabezaX < 0 ||
-            cabezaX >= tamanioTablero ||
+            cabezaX > tamanioTablero ||
             cabezaY < 0 ||
-            cabezaY >= tamanioTablero
+            cabezaY > tamanioTablero
         );
     }
 
     // Comprueba si la cabeza choca con su propio cuerpo
     chocaConsigoMisma() {
-        let posicion = this.posCabezaX[this.posCabezaX.length - 1] + "-" + this.posCabezaY[this.posCabezaY.length - 1];
+        let posicion = this.posX[this.posX.length - 1] + "-" + this.posY[this.posY.length - 1];
         let celda = document.getElementById(posicion);
         if (celda.classList.contains("cuerpo")) {
             return true;
@@ -116,22 +153,43 @@ class Serpiente {
 
     // Comprueba si la serpiente come la comida
     comer(comida) {
-        let posicion = this.posCabezaX[this.posCabezaX.length - 1] + "-" + this.posCabezaY[this.posCabezaY.length - 1];
-        let celda = document.getElementById(posicion);
-        if (celda.classList.contains("comida")) {
+        let posicionCabeza = this.posX[this.posX.length - 1] + "-" + this.posY[this.posY.length - 1];
+        let celdaCabeza = document.getElementById(posicionCabeza);
+        if (celdaCabeza.classList.contains("comida")) {
             this.crecer = true;
-        }
-        this.crecer = false;
+            return true;
+        }        
     }
 
     // Dibuja la serpiente en el tablero (DOM)
-    dibujar(tableroDOM) {}
+    dibujar() {
+        // Pintamos la cabeza
+        let posCabeza = this.posX[this.posX.length - 1] + "-" + this.posY[this.posY.length - 1];
+        let celdaCabeza = document.getElementById(posCabeza);
+
+        celdaCabeza.classList.remove("vacio");
+        celdaCabeza.classList.remove("comida");
+        celdaCabeza.classList.add("cabeza");
+        
+        // Pintamos el cuerpo
+        let posCuerpo = this.posX[this.posX.length - 2] + "-" + this.posY[this.posY.length - 2];
+        let celdaCuerpo = document.getElementById(posCuerpo);
+
+        celdaCuerpo.classList.remove("cabeza");
+        celdaCuerpo.classList.add("cuerpo");
+        
+        // Pintamos la cola
+        let posCola = this.posX[0] + "-" + this.posY[0];
+        let celdaCola = document.getElementById(posCola);
+        celdaCola.classList = '';
+        celdaCola.classList.add("vacio");
+    }
 }
 
 
 // Clase Comida
 class Comida {
-    constructor(x = 10, y = 17) {
+    constructor(y = 10, x = 17) {
         this.x = x;
         this.y = y;
         this.dibujar(x,y);
@@ -146,14 +204,14 @@ class Comida {
     dibujar(x,y) {
         let posicion = x + "-" + y;
         let celda = document.getElementById(posicion);
-        if (celda.classList.contains("cabeza") || celda.classList.contains("cuerpo")) {
-            return false
-        } else {
+        if (celda.classList.contains("vacio")) {
             celda.classList.remove("vacio");
             celda.classList.add("comida");
             this.x = x;
             this.y = y;
             return true;
+        } else{
+            return false;
         }
     }
 
