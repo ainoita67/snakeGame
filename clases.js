@@ -184,8 +184,7 @@ class Serpiente {
         let posCabeza = this.posX[this.posX.length - 1] + "-" + this.posY[this.posY.length - 1];
         let celdaCabeza = document.getElementById(posCabeza);
 
-        celdaCabeza.classList.remove("vacio");
-        celdaCabeza.classList.remove("comida");
+        celdaCabeza.classList = '';
         celdaCabeza.classList.add("cabeza");
         
         // Pintamos el cuerpo
@@ -219,6 +218,12 @@ class Comida {
         return [x, y];
     }
 
+    // devuelve un número de comida. Siendo 1 manzana, 2 platano y 3 fresa.
+    generarComidaAleatoria() {
+        let numComida = Math.floor(Math.random() * 3) + 1;
+        return numComida;
+    }
+
     dibujar(x,y) {
         // posicion en la que queremos dibujar la comidoa. Ejemplo: 12-17. Es uno de los id de los divs que componen el tablero
         let posicion = x + "-" + y;
@@ -226,7 +231,12 @@ class Comida {
         let celda = document.getElementById(posicion);
         if (celda.classList.contains("vacio")) {
             celda.classList.remove("vacio");
+
+            let num = this.generarComidaAleatoria();
+            let clase = "comida" + num;
+            celda.classList.add(clase);
             celda.classList.add("comida");
+
             this.x = x;
             this.y = y;
             return true;

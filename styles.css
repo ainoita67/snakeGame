@@ -1,4 +1,3 @@
-
 body{
     display: flex;
     align-items: center;
@@ -18,8 +17,27 @@ body{
     background-color: green;
 }
 
-.comida{
-    background-color: red;
+/* Gestión de las comidas*/
+.comida1 {
+    background-image: url("img/manzana-pixel.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: green;
+}
+.comida2 {
+    background-image: url("img/platano-pixel.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: green;
+}
+.comida3 {
+    background-image: url("img/fresa-pixel.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: green;
 }
 
 .cuerpo{
