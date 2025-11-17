@@ -14,7 +14,9 @@ body{
 }
 
 .cabeza{
-    background-color: green;
+    background-image: url(img/cabeza.png);
+    background-size: cover;
+    
 }
 
 /* Gestión de las comidas*/
@@ -41,7 +43,13 @@ body{
 }
 
 .cuerpo{
-    background-color: cornflowerblue;
+    background-image: url(img/cuerpo.png);
+    background-size: cover;
+}
+
+.cola{
+    background-image: url(img/cola.png);
+    background-size: cover;
 }
 
 .vacio{

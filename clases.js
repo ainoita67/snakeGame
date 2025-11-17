@@ -180,12 +180,29 @@ class Serpiente {
 
     // Dibuja la serpiente en el tablero (DOM)
     dibujar() {
+        let angulo;
+        switch (this.direccion) {
+            case "arriba":
+                angulo = -90;
+            break;
+            case "abajo":
+                angulo = 90;
+            break;
+            case "izquierda":
+                angulo = 180;
+            break;
+            case "derecha":
+                angulo = 0
+            break;
+        }
+
         // Pintamos la cabeza
         let posCabeza = this.posX[this.posX.length - 1] + "-" + this.posY[this.posY.length - 1];
         let celdaCabeza = document.getElementById(posCabeza);
 
         celdaCabeza.classList = '';
         celdaCabeza.classList.add("cabeza");
+        celdaCabeza.style.setProperty("transform", "rotate(" +  angulo + "deg)");
         
         // Pintamos el cuerpo
         let posCuerpo = this.posX[this.posX.length - 2] + "-" + this.posY[this.posY.length - 2];
@@ -193,12 +210,18 @@ class Serpiente {
 
         celdaCuerpo.classList.remove("cabeza");
         celdaCuerpo.classList.add("cuerpo");
-        
-        // Pintamos la cola
-        let posCola = this.posX[0] + "-" + this.posY[0];
+
+        // Pintamos el cola
+        let posCola = this.posX[1] + "-" + this.posY[1];
         let celdaCola = document.getElementById(posCola);
-        celdaCola.classList = '';
-        celdaCola.classList.add("vacio");
+        celdaCola.classList.remove("cuerpo");
+        celdaCola.classList.add("cola");
+        
+        // Pintamos la vaciamos final
+        let posFin = this.posX[0] + "-" + this.posY[0];
+        let celdaFin = document.getElementById(posFin);
+        celdaFin.classList = '';
+        celdaFin.classList.add("vacio");
     }
 }
 
