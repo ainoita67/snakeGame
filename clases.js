@@ -12,22 +12,42 @@ class Juego {
         document.addEventListener("keydown", (event) => {
             switch (event.key) {
                 case "ArrowUp":
-                    serpiente.direccion = "arriba";
+                    if (serpiente.girar) {
+                        serpiente.cambiarDireccion("arriba");
+                        serpiente.girar = false;
+                    }
                     break;
                 case "ArrowDown":
-                    serpiente.direccion = "abajo";
+                    if (serpiente.girar) {
+                        serpiente.cambiarDireccion("abajo");    
+                        serpiente.girar = false;
+                    }
                     break;
                 case "ArrowLeft":
-                    serpiente.direccion = "izquierda";
+                    if (serpiente.girar) {
+                        serpiente.cambiarDireccion("izquierda");
+                        serpiente.girar = false;
+                    }
                     break;
                 case "ArrowRight":
-                    serpiente.direccion = "derecha";
+                    if (serpiente.girar) {
+                        serpiente.cambiarDireccion("derecha");
+                        serpiente.girar = false;
+                    }
                     break;
             }
-            });
+
+        });
 
         const intervalo = setInterval(() => {
+            serpiente.girar = true;
             serpiente.mover();
+            if (!serpiente.viva) {
+                clearInterval(intervalo);
+                alert("Has perdido. Puntos: " + (serpiente.posX.length - 4));
+                window.location.reload(true);
+            }
+
             serpiente.comer();
             if (serpiente.comer()) {
                 let posAleatoria;
@@ -36,13 +56,9 @@ class Juego {
                 }
                 while (!comida.dibujar(posAleatoria[0] , posAleatoria[1]));
             }
+
             serpiente.dibujar();
 
-            if (!serpiente.viva) {
-                clearInterval(intervalo);
-                alert("Has perdido. Puntos: " + (serpiente.posX.length - 4));
-                window.location.href = "index.html";
-            }
         }, 300);
     }
 
@@ -73,6 +89,7 @@ class Serpiente {
         this.direccion = "derecha";
         this.crecer = false;
         this.viva = true;
+        this.girar = true;
         this.dibujar();
     }
 
@@ -134,9 +151,9 @@ class Serpiente {
 
         // fuera de los límites
         return (
-            cabezaX < 0 ||
+            cabezaX < 1 ||
             cabezaX > tamanioTablero ||
-            cabezaY < 0 ||
+            cabezaY < 1 ||
             cabezaY > tamanioTablero
         );
     }
