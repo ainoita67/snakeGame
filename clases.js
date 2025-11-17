@@ -180,6 +180,7 @@ class Serpiente {
 
     // Dibuja la serpiente en el tablero (DOM)
     dibujar() {
+        //guarda en que angulo rotar la cabeza para que apunte en la direccion que lleva la serpiente
         let angulo;
         switch (this.direccion) {
             case "arriba":
@@ -202,6 +203,7 @@ class Serpiente {
 
         celdaCabeza.classList = '';
         celdaCabeza.classList.add("cabeza");
+            //añadir estilos a la cabeza para que se rote
         celdaCabeza.style.setProperty("transform", "rotate(" +  angulo + "deg)");
         
         // Pintamos el cuerpo
@@ -212,16 +214,25 @@ class Serpiente {
         celdaCuerpo.classList.add("cuerpo");
 
         // Pintamos el cola
+            //coje el elemento anterior a la cola (cuerpo) para usar los mismos estilos (rotacion) que el
+        let posCola_1 = this.posX[2] + "-" + this.posY[2];
+        let celdaCola_1 = document.getElementById(posCola_1);
+
         let posCola = this.posX[1] + "-" + this.posY[1];
         let celdaCola = document.getElementById(posCola);
         celdaCola.classList.remove("cuerpo");
         celdaCola.classList.add("cola");
+            //añade rotacion a al cola
+        celdaCola.style.setProperty("transform", celdaCola_1.style.transform);
         
-        // Pintamos la vaciamos final
+        // Vacia la celda detras de la serpiente
         let posFin = this.posX[0] + "-" + this.posY[0];
         let celdaFin = document.getElementById(posFin);
         celdaFin.classList = '';
         celdaFin.classList.add("vacio");
+            //elimina rotacion
+        celdaFin.style.removeProperty("transform");
+
     }
 }
 

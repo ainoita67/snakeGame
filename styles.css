@@ -14,9 +14,8 @@ body{
 }
 
 .cabeza{
-    background-image: url(img/cabeza.png);
-    background-size: cover;
-    
+    background-image: url("img/cabeza.png");
+    background-size: cover;    
 }
 
 /* Gestión de las comidas*/
@@ -25,36 +24,32 @@ body{
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: green;
 }
 .comida2 {
     background-image: url("img/platano-pixel.png");
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: green;
 }
 .comida3 {
     background-image: url("img/fresa-pixel.png");
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: green;
 }
 
 .cuerpo{
-    background-image: url(img/cuerpo.png);
+    background-image: url("img/cuerpo.png");
     background-size: cover;
 }
 
 .cola{
-    background-image: url(img/cola.png);
+    background-image: url("img/cola.png");
     background-size: cover;
 }
 
 .vacio{
     background-color: white;
-    border: 1px solid saddlebrown;
 }
 
 .invisible{
