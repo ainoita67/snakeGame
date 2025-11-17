@@ -48,11 +48,11 @@ class Juego {
 
     creartablero(tamanyo){
         const body = document.getElementsByTagName("body")[0];
-        //crear el tablero
+        //crear el tablero dentro del body
         const tablero = document.createElement("div");
         tablero.id = "tablero";
         body.appendChild(tablero);
-        //crear las 400 celdas
+        //crear las 400 celdas con clase "x-y"
         for (let i = 1; i <= tamanyo; i++) {
             for (let j = 1; j <= tamanyo; j++) {
             const celda = document.createElement("div");
@@ -195,6 +195,7 @@ class Comida {
         this.dibujar(x,y);
     }
 
+    // devuelve array con posicion aleatoria para la comida
     generarPosicionAleatoria(tamanioTablero) {
         let x = Math.floor(Math.random() * (tamanioTablero )) + 1;
         let y = Math.floor(Math.random() * (tamanioTablero )) + 1;
@@ -202,7 +203,9 @@ class Comida {
     }
 
     dibujar(x,y) {
+        // posicion en la que queremos dibujar la comidoa. Ejemplo: 12-17. Es uno de los id de los divs que componen el tablero
         let posicion = x + "-" + y;
+        // se guarda la celda(div) con el id que buscamos para poder modificarla
         let celda = document.getElementById(posicion);
         if (celda.classList.contains("vacio")) {
             celda.classList.remove("vacio");
