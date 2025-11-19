@@ -59,7 +59,7 @@ class Juego {
 
             serpiente.dibujar();
 
-        }, 300);
+        }, 150);
     }
 
     creartablero(tamanyo){
@@ -82,7 +82,7 @@ class Juego {
 
 // Clase Serpiente
 class Serpiente {
-    constructor() {
+    constructor(tamanyo = 20) {
         // La serpiente empieza con longitud 3
         this.posX = [2, 3, 4, 5];
         this.posY = [10, 10, 10, 10];
@@ -90,6 +90,7 @@ class Serpiente {
         this.crecer = false;
         this.viva = true;
         this.girar = true;
+        this.tamanyoTablero = tamanyo;
         this.dibujar();
     }
 
@@ -145,16 +146,15 @@ class Serpiente {
 
     // Comprueba si la cabeza choca con las paredes
     chocaConparedes() {
-        const tamanioTablero = 20;
         const cabezaX = this.posX[this.posX.length - 1];
         const cabezaY = this.posY[this.posY.length - 1];
 
         // fuera de los límites
         return (
             cabezaX < 1 ||
-            cabezaX > tamanioTablero ||
+            cabezaX > this.tamanyoTablero ||
             cabezaY < 1 ||
-            cabezaY > tamanioTablero
+            cabezaY > this.tamanyoTablero
         );
     }
 
@@ -162,7 +162,7 @@ class Serpiente {
     chocaConsigoMisma() {
         let posicion = this.posX[this.posX.length - 1] + "-" + this.posY[this.posY.length - 1];
         let celda = document.getElementById(posicion);
-        if (celda.classList.contains("cuerpo")) {
+        if (celda.classList.contains("cuerpo") || celda.classList.contains("cola")) {
             return true;
         }
         return false;
@@ -239,7 +239,7 @@ class Serpiente {
 
 // Clase Comida
 class Comida {
-    constructor(y = 10, x = 17) {
+    constructor(x = 17, y = 10) {
         this.x = x;
         this.y = y;
         this.dibujar(x,y);
