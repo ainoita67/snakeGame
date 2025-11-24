@@ -3,7 +3,7 @@
     display: grid;
     grid-template-columns: repeat(20, 1fr);
     grid-template-rows: repeat(20, 1fr);
-    width: 50%;
+    height: 80vh;
     aspect-ratio: 1 / 1;
     border: 5px solid #45a049;
 }
