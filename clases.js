@@ -1,13 +1,29 @@
 // Clase Juego
 class Juego {
-    constructor(tamanyo = 20){
+    constructor(tamanyo = 20, velocidad = 150, dificultad = 2){
         this.perdidio = false;
         this.ganado = false;
         this.tamanyo = tamanyo;
-        this.creartablero(tamanyo);
+        this.velocidad = velocidad,
+        this.dificultad = dificultad;
+        this.creartablero();
         
-        let comida = new Comida(10,17);
-        let serpiente = new Serpiente();
+        //Posicion inical de la comida y para cada tamaño de tablero
+        let comidax;
+        let inicioy; //se generan eln la misma y la comida y la serpiente
+        if (tamanyo <= 10){
+            comidax = 8;
+            inicioy = 5;
+        } else if (tamanyo <= 15){
+            comidax = 12;
+            inicioy = 8;
+        } else if (tamanyo > 15){
+            comidax = 17;
+            inicioy = 10;
+        }
+
+        let comida = new Comida(comidax,inicioy);
+        let serpiente = new Serpiente(tamanyo, inicioy);
 
         document.addEventListener("keydown", (event) => {
             switch (event.key) {
@@ -48,7 +64,6 @@ class Juego {
                 window.location.reload(true);
             }
 
-            serpiente.comer();
             if (serpiente.comer()) {
                 let posAleatoria;
                 do{
@@ -59,18 +74,21 @@ class Juego {
 
             serpiente.dibujar();
 
-        }, 150);
+        }, velocidad);
     }
 
-    creartablero(tamanyo){
+    creartablero(){
+        console.log(this.tamanyo);
         const body = document.getElementsByTagName("body")[0];
         //crear el tablero dentro del body
         const tablero = document.createElement("div");
         tablero.id = "tablero";
+        tablero.style.gridTemplateColumns = `repeat(${this.tamanyo}, 1fr)`;
+        tablero.style.gridTemplateRows = `repeat(${this.tamanyo}, 1fr)`;
         body.appendChild(tablero);
         //crear las 400 celdas con clase "x-y"
-        for (let i = 1; i <= tamanyo; i++) {
-            for (let j = 1; j <= tamanyo; j++) {
+        for (let i = 1; i <= this.tamanyo; i++) {
+            for (let j = 1; j <= this.tamanyo; j++) {
             const celda = document.createElement("div");
             celda.id = `${j}-${i}`;
             celda.classList.add("vacio");
@@ -82,10 +100,10 @@ class Juego {
 
 // Clase Serpiente
 class Serpiente {
-    constructor(tamanyo = 20) {
+    constructor(tamanyo = 20, inicioy = 10) {
         // La serpiente empieza con longitud 3
         this.posX = [2, 3, 4, 5];
-        this.posY = [10, 10, 10, 10];
+        this.posY = [inicioy, inicioy, inicioy, inicioy];
         this.direccion = "derecha";
         this.crecer = false;
         this.viva = true;
@@ -201,7 +219,7 @@ class Serpiente {
         let posCabeza = this.posX[this.posX.length - 1] + "-" + this.posY[this.posY.length - 1];
         let celdaCabeza = document.getElementById(posCabeza);
 
-        celdaCabeza.classList = '';
+        celdaCabeza.className = '';
         celdaCabeza.classList.add("cabeza");
             //añadir estilos a la cabeza para que se rote
         celdaCabeza.style.setProperty("transform", "rotate(" +  angulo + "deg)");
@@ -228,7 +246,7 @@ class Serpiente {
         // Vacia la celda detras de la serpiente
         let posFin = this.posX[0] + "-" + this.posY[0];
         let celdaFin = document.getElementById(posFin);
-        celdaFin.classList = '';
+        celdaFin.className = '';
         celdaFin.classList.add("vacio");
             //elimina rotacion
         celdaFin.style.removeProperty("transform");
