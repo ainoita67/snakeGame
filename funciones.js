@@ -27,7 +27,20 @@ function empezarjuego(){
             break;
     }
 
-    let juego = new Juego(tamTablero, velocidad, datos.dificultad);
+    let velocidadFruta;
+    switch (datos.velocidadFruta){
+        case 1:
+            velocidadFruta = 8000;
+            break;
+        case 2:
+            velocidadFruta = 6000;
+            break;
+        case 3:
+            velocidadFruta = 4000;
+            break;
+    }
+
+    let juego = new Juego(tamTablero, velocidad, velocidadFruta);
     let boton = document.getElementById("boton");
     boton.classList.add("invisible");
     let formulario = document.getElementById("formulario");
@@ -44,9 +57,10 @@ function recogerDatos() {
     const velocidadSeleccionada = document.querySelector('input[name="velocidad"]:checked');
     const velocidad = velocidadSeleccionada ? Number(velocidadSeleccionada.value) : 2;
 
-    // dificultad
-    const dificultadSeleccionada = document.querySelector('input[name="dificultad"]:checked');
-    const dificultad = dificultadSeleccionada ? Number(dificultadSeleccionada.value) : 2;
+    // Velocidad fruta
+    const velocidadFrutaSeleccionada = document.querySelector('input[name="velocidadFruta"]:checked');
+    const velocidadFruta = velocidadFrutaSeleccionada ? Number(velocidadFrutaSeleccionada.value) : 2;
 
-    return { tablero, velocidad, dificultad };
+
+    return { tablero, velocidad, velocidadFruta};
 }

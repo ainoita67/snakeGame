@@ -1,11 +1,11 @@
 // Clase Juego
 class Juego {
-    constructor(tamanyo = 20, velocidad = 150, dificultad = 2){
+    constructor(tamanyo = 20, velocidad = 150, velocidadFruta = 5000){
         this.perdidio = false;
         this.ganado = false;
         this.tamanyo = tamanyo;
-        this.velocidad = velocidad,
-        this.dificultad = dificultad;
+        this.velocidad = velocidad;
+        this.velocidadFruta = velocidadFruta;
         this.creartablero();
         
         //Posicion inical de la comida y para cada tamaño de tablero
@@ -55,6 +55,43 @@ class Juego {
 
         });
 
+        // Intervalo para generar comida cada 6 segundos
+        let tIntervaloComida = this.velocidadFruta;
+        
+        // Guardamos el id del intervalo
+        let intervaloComida = null;
+
+        function generarComida() {
+            let posAleatoria;
+            do {
+                posAleatoria = comida.generarPosicionAleatoria(tamanyo);
+            } while (!comida.dibujar(posAleatoria[0], posAleatoria[1]));
+            
+            // Guardamos la posición de la comida
+            comida.x = posAleatoria[0];
+            comida.y = posAleatoria[1];
+        }
+
+        function reiniciarIntervaloComida() {
+            // Detener intervalo actual
+            if (intervaloComida) {
+                clearInterval(intervaloComida);
+            }
+            // Generamos uno nuevo
+            intervaloComida = setInterval(() => {
+                // Limpiamos primero la comida anterior
+                let posicion = comida.x + "-" + comida.y;
+                let celda = document.getElementById(posicion);
+                celda.classList = '';
+                celda.classList.add("vacio");
+
+                // Generamos la comida
+                generarComida();
+            }, tIntervaloComida);
+        }
+
+        reiniciarIntervaloComida();
+
         const intervalo = setInterval(() => {
             serpiente.girar = true;
             serpiente.mover();
@@ -64,12 +101,11 @@ class Juego {
                 window.location.reload(true);
             }
 
+            // Si la serpiente come, generar comida nueva inmediatamente
             if (serpiente.comer()) {
-                let posAleatoria;
-                do{
-                   posAleatoria = comida.generarPosicionAleatoria(tamanyo);
-                }
-                while (!comida.dibujar(posAleatoria[0] , posAleatoria[1]));
+                generarComida();
+
+                reiniciarIntervaloComida();
             }
 
             serpiente.dibujar();
@@ -187,7 +223,7 @@ class Serpiente {
     }
 
     // Comprueba si la serpiente come la comida
-    comer(comida) {
+    comer() {
         let posicionCabeza = this.posX[this.posX.length - 1] + "-" + this.posY[this.posY.length - 1];
         let celdaCabeza = document.getElementById(posicionCabeza);
         if (celdaCabeza.classList.contains("comida")) {
@@ -273,7 +309,7 @@ class Comida {
     // devuelve un número de comida. Siendo 1 manzana, 2 platano y 3 fresa.
     generarComidaAleatoria() {
         let numComida = Math.floor(Math.random() * 3) + 1;
-        return numComida;
+        return numComida;x
     }
 
     dibujar(x,y) {
