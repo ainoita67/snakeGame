@@ -1,7 +1,7 @@
 // Clase Juego
 class Juego {
     constructor(tamanyo = 20, velocidad = 150, velocidadFruta = 5000){
-        this.perdidio = false;
+        this.perdido = false;
         this.ganado = false;
         this.tamanyo = tamanyo;
         this.velocidad = velocidad;
@@ -94,10 +94,20 @@ class Juego {
 
         const intervalo = setInterval(() => {
             serpiente.girar = true;
+
+            // Comprobamos si se ha ganado
+            let tamanyoGanador = tamanyo * tamanyo ;
+            if (tamanyoGanador == serpiente.posX.length) {
+                clearInterval(intervalo);
+                alert("Felicidades! Has ganado!");
+                window.location.reload(true);
+            }
+
             serpiente.mover();
             if (!serpiente.viva) {
                 clearInterval(intervalo);
                 alert("Has perdido. Puntos: " + (serpiente.posX.length - 4));
+                this.perdido = true;
                 window.location.reload(true);
             }
 
